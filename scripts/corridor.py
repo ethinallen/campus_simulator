@@ -16,4 +16,3 @@ class corridor:
 if __name__ == '__main__':
     s = sensor('thermostat')
     print(np.mean(s.ttl))
-    # print(s.determine_ttl('thermostat'))

@@ -1,4 +1,5 @@
 import numpy as np
+import random as rd
 
 '''
     - Need to give them different reporting frequencies
@@ -7,16 +8,16 @@ import numpy as np
 class sensor:
 
     # initialize the sensor based on type and set age to 0
-    def __init__(self, user_defined_sensor_type, sensor_id):
+    def __init__(self, user_defined_sensor_type,):
         self.type = user_defined_sensor_type
         self.info = None
-        age = 0
+        self.age = 0
         self.meter_id = None
-
         self.ttl = self.determine_ttl()
 
     def getOlder(self):
         self.age += 1
+        print('I aged :) {}'.format(self.age))
 
     # determine the life of the sensor (hours)
     def determine_ttl(self, ):
