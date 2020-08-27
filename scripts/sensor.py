@@ -1,9 +1,13 @@
 import numpy as np
 
+'''
+    - Need to give them different reporting frequencies
+'''
+
 class sensor:
 
     # initialize the sensor based on type and set age to 0
-    def __init__(self, user_defined_sensor_type):
+    def __init__(self, user_defined_sensor_type, sensor_id):
         self.type = user_defined_sensor_type
         self.info = None
         age = 0
