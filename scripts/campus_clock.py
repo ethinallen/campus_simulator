@@ -12,22 +12,21 @@ class clock:
         self.campus = campus()
         inputData = self.loadData()
         self.age(inputData)
+        self.campus.df.to_csv('data/output.csv')
 
         elapsed_time = time.time() - start_time
         print('ELAPSED TIME:\t{}'.format(elapsed_time))
 
-        self.makeDict()
-
     # age the campus using input data as base
     def age(self, input_data):
         for row_index, row in input_data.iterrows():
-            self.campus.getOlder(row_index, input_data.iloc[row_index, :])
+            self.campus.getOlder(row)
 
     # read data in from raw_csv file
     def loadData(self):
-        df = pd.read_csv('data/raw_data/AEP_hourly.csv', index_col=[0], parse_dates=[0])
+        df = pd.read_csv('data/raw_data/AEP_hourly.csv')
         df['index'] = np.arange(len(df))
-        df = df.set_index('index')
+        df.set_index('index')
         return df
 
     def graphDF(self, df):
@@ -41,7 +40,7 @@ class clock:
 
         for building in self.campus.buildings:
             building_object = self.campus.buildings[building]
-            building_id = building_object.id_num
+            building_id = building_object.building_id
             buildingDict[building_id] = { }
             buildingDict[building_id]['power_readings'] = building_object.previous_power_consumptions
             buildingDict[building_id]['rooms'] = { }

@@ -1,10 +1,12 @@
 import numpy as np
 from building import building
+import pandas as pd
 
 class campus:
 
     # initialize the sensor based on type and set age to 0
     def __init__(self):
+        self.df = pd.DataFrame()
         self.buildings = { }
         num_buildings = np.random.poisson(35, 1)[0]
 
@@ -16,12 +18,21 @@ class campus:
             self.buildings[i] = building(i)
 
     # iterate through time
-    def getOlder(self, time, row):
-
+    def getOlder(self, row):
         for building in self.buildings:
             building_object = self.buildings[building]
 
             building_object.generate_power_consumption(row['AEP_MW'])
+
+            entry = {
+                'Datetime'  : [row['Datetime']],
+                'PSID'      : [building_object.building_id],
+                'Value'     : [building_object.previous_power_consumption]
+            }
+
+            row_df = pd.DataFrame(entry)
+            self.df = self.df.append(row_df)
+
 
             for room in building_object.rooms:
                 room_object = building_object.rooms[room]
