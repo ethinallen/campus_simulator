@@ -33,7 +33,7 @@ class sensor:
     def replace_sensor(self):
         self.replacement_wait = np.random.poisson(72, 1)[0]
         self.age = 0
-        print('SENSOR REPLACED AFTER {} HOURS'.format(self.replacement_wait))
+        # print('SENSOR REPLACED AFTER {} HOURS'.format(self.replacement_wait))
 
     # generate a sensor value subject to type
     def generateValue(self):
@@ -47,4 +47,3 @@ class sensor:
 if __name__ == '__main__':
     s = sensor('thermostat')
     print(np.mean(s.ttl))
-    # print(s.determine_ttl('thermostat'))

@@ -13,15 +13,15 @@ class campus:
     # instantiate buildings
     def makeBuildings(self, num_buildings):
         for i in range(num_buildings):
-            self.buildings[i] = building(i, 10)
+            self.buildings[i] = building(i)
 
     # iterate through time
-    def getOlder(self, time, new_rows):
+    def getOlder(self, time, row):
 
         for building in self.buildings:
             building_object = self.buildings[building]
 
-            building_object.generate_power_consumption(time)
+            building_object.generate_power_consumption(row['AEP_MW'])
 
             for room in building_object.rooms:
                 room_object = building_object.rooms[room]

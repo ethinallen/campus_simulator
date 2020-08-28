@@ -35,4 +35,3 @@ class room:
 
 if __name__ == '__main__':
     s = sensor('thermostat')
-    # print(s.determine_ttl('thermostat'))
