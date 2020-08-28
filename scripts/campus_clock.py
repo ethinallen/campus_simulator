@@ -11,7 +11,10 @@ class clock:
         start_time = time.time()
         self.campus = campus()
         inputData = self.loadData()
+
         self.age(inputData)
+
+        self.campus.df = pd.concat(self.campus.entries, ignore_index=True)
         self.campus.df.to_csv('data/output.csv')
 
         elapsed_time = time.time() - start_time
@@ -21,17 +24,16 @@ class clock:
     def age(self, input_data):
         for row_index, row in input_data.iterrows():
             self.campus.getOlder(row)
+        print('DONE AGING')
 
     # read data in from raw_csv file
     def loadData(self):
         df = pd.read_csv('data/raw_data/AEP_hourly.csv')
-        df['index'] = np.arange(len(df))
-        df.set_index('index')
         return df
 
-    def graphDF(self, df):
+    def graphDF(self):
         color_pal = ["#F8766D", "#D39200", "#93AA00", "#00BA38", "#00C19F", "#00B9E3", "#619CFF", "#DB72FB"]
-        df.plot(style='.', figsize=(15,5), color=color_pal[0], title='PJM East')
+        self.campus.df.plot(style='.', figsize=(15,5), color=color_pal[0], title='REAL FAKE DATA GET YOUR REAL FAKE DATA HERE')
         plt.show()
 
     # make json snapshot of the campus

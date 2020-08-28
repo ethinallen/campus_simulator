@@ -131,3 +131,4 @@ dmypy.json
 # misc
 Pipfile*
 campus_snapshot.json
+*.csv
