@@ -13,7 +13,7 @@ from corridor import corridor
 class building:
 
     # initialize the sensor based on type and set age to 0
-    def __init__(self, building_id, number_rooms, sensors_scale_val):
+    def __init__(self, building_id, sensors_scale_val):
 
         self.id_num         = building_id
         self.building_mod   = None
@@ -21,19 +21,23 @@ class building:
         self.corridors      = { }
         self.previous_power_consumption = None
 
-        self.makeRooms(rd.randint(5,10))
-        self.makeCorridors(rd.randint(5,10))
+        self.num_rooms = rd.randint(1, 5)
+        self.num_corrs = rd.randint(1,3)
+
+        self.makeRooms(self.num_rooms)
+        self.makeCorridors(self.num_corrs)
+
 
     def makeRooms(self, number_rooms):
         for i in range(number_rooms):
-            self.rooms[i] = room('thermostat')
+            self.rooms[i] = room(i)
 
     def makeCorridors(self, number_corridors):
         for i in range(number_corridors):
-            self.corridors[i] = room('thermostat')
+            self.corridors[i] = corridor(i)
 
-    def generate_power_consumption(self, time):
-        self.previous_power_consumption = time * 13.4
+    def generate_power_consumption(self, theTime):
+        self.previous_power_consumption = theTime * 13.4
 
 if __name__ == '__main__':
     s = sensor('thermostat')

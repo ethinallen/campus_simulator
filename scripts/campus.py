@@ -4,18 +4,19 @@ from building import building
 class campus:
 
     # initialize the sensor based on type and set age to 0
-    def __init__(self, numBuildings):
+    def __init__(self):
         self.buildings = { }
+        num_buildings = np.random.poisson(35, 1)[0]
 
-        self.makeBuildings(numBuildings)
+        self.makeBuildings(num_buildings)
 
     # instantiate buildings
-    def makeBuildings(self, numBuildings):
-        for i in range(numBuildings):
-            self.buildings[i] = building(i, 4, 10)
+    def makeBuildings(self, num_buildings):
+        for i in range(num_buildings):
+            self.buildings[i] = building(i, 10)
 
     # iterate through time
-    def getOlder(self, time):
+    def getOlder(self, time, new_rows):
 
         for building in self.buildings:
             building_object = self.buildings[building]
@@ -29,7 +30,7 @@ class campus:
                     sensor_object.getOlder()
 
 if __name__ == '__main__':
-    c = campus(2)
+    c = campus()
 
     for building in c.buildings:
         for room in building:
