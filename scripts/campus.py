@@ -1,6 +1,10 @@
 import numpy as np
 from building import building
 import pandas as pd
+import numpy as np
+import datetime
+import time
+
 
 class campus:
 
@@ -11,8 +15,7 @@ class campus:
 
         self.entries = []
 
-        # num_buildings = np.random.poisson(35, 1)[0]
-        num_buildings = 1
+        num_buildings = np.random.poisson(10, 1)[0]
 
         self.makeBuildings(num_buildings)
 
@@ -21,40 +24,28 @@ class campus:
         for i in range(num_buildings):
             self.buildings[i] = building(i)
 
-    # iterate through time
+    # age every building 1 unit of time
     def getOlder(self, row):
         for building in self.buildings:
             building_object = self.buildings[building]
 
             building_object.generate_power_consumption(row['AEP_MW'])
 
-            # s = (
-            #     f"{row['Datetime']},"
-            #     f"{building_object.building_id},"
-            #     f"building_object.previous_power_consumption\n"
-            # )
+            epoch_time = time.mktime(datetime.datetime.strptime(row['Datetime'], "%Y-%m-%d %H:%M:%S").timetuple())
 
-            entry = {
-                'Datetime'  : [row['Datetime']],
-                'PSID'      : [building_object.building_id],
-                'Value'     : [building_object.previous_power_consumption]
-            }
+            entry = [epoch_time, int(building_object.building_id), int(building_object.previous_power_consumption)]
 
+            self.entries.append(entry)
 
-            row_df = pd.DataFrame(entry)
-            self.entries.append(row_df)
-
-
-            # for room in building_object.rooms:
-            #     room_object = building_object.rooms[room]
-            #     for sensor in room_object.sensors:
-            #         sensor_object = room_object.sensors[sensor]
-            #         sensor_object.getOlder()
+            for room in building_object.rooms:
+                room_object = building_object.rooms[room]
+                for sensor in room_object.sensors:
+                    sensor_object = room_object.sensors[sensor]
+                    sensor_object.getOlder()
 
     def write_output_csv(self):
-        self.df = pd.concat(self.entries)
-        # self.df.to_csv
-
+        np_array = np.array(self.entries)
+        np.savetxt("data/processed_data/output.csv", np_array, delimiter=",")
 
 if __name__ == '__main__':
     c = campus()
