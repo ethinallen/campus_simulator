@@ -9,6 +9,8 @@
     - need to work with Zach on these equations
 - 4. Every sensor reports a given metric
 ---
+# Meerschaum Integration
 
-#
--
+- turn 2d array of data into a pandas dataframe
+- create a meerschaum connector
+- use meerschaum.to_sql in order for us to write

@@ -9,12 +9,16 @@ class clock:
 
     def __init__(self, number_campuses):
         start_time = time.time()
+
+
         self.campus = campus()
         inputData = self.loadData()
 
         self.age(inputData)
 
         self.campus.write_output_csv()
+
+        self.writeDict(self.makeDict())
 
         elapsed_time = time.time() - start_time
         print('ELAPSED TIME:\t{}'.format(elapsed_time))
@@ -37,7 +41,7 @@ class clock:
         self.inputData.plot(style='.', figsize=(15,5), color=color_pal[0], title='Data')
         plt.show()
 
-    # make json snapshot of the campus
+    # make dictionary of all of the aspects of campus; returns dictionary
     def makeDict(self):
         buildingDict = { }
 
@@ -74,7 +78,9 @@ class clock:
                     buildingDict[building_id]['corridors'][corridor_id][meter_id]['age'] = str(sensor_object.age)
                     buildingDict[building_id]['corridors'][corridor_id][meter_id]['deaths'] = str(sensor_object.deaths)
                     buildingDict[building_id]['corridors'][corridor_id][meter_id]['latest_ttl'] = str(sensor_object.ttl)
+        return buildingDict
 
+    def writeDict(self, buildingDict):
         with open('data/campus_snapshot.json', 'w+') as f:
             json.dump(buildingDict, f, indent=4, sort_keys=True)
 

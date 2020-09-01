@@ -18,7 +18,7 @@ class building:
         self.building_mod               = None
         self.rooms                      = { }
         self.corridors                  = { }
-        self.previous_power_consumption = 0
+        self.previous_power_consumptions = []
 
         self.num_rooms = rd.randint(1, 5)
         self.num_corrs = rd.randint(1,3)
@@ -38,8 +38,7 @@ class building:
 
 
     def generate_power_consumption(self, rowData):
-        self.previous_power_consumption = np.random.normal(rowData, 5, 1)[0]
-
+        self.previous_power_consumptions.append(np.random.normal(rowData, 5, 1)[0])
 
     # def generate_modifier(self):
 

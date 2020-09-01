@@ -4,7 +4,8 @@ import pandas as pd
 import numpy as np
 import datetime
 import time
-
+import dateutil.parser
+from dateutil.parser import parse
 
 class campus:
 
@@ -32,16 +33,32 @@ class campus:
             building_object.generate_power_consumption(row['AEP_MW'])
 
             epoch_time = time.mktime(datetime.datetime.strptime(row['Datetime'], "%Y-%m-%d %H:%M:%S").timetuple())
-
-            entry = [epoch_time, int(building_object.building_id), int(building_object.previous_power_consumption)]
+            entry = [epoch_time, 0, int(building_object.building_id), int(building_object.previous_power_consumptions[-1])]
 
             self.entries.append(entry)
 
             for room in building_object.rooms:
                 room_object = building_object.rooms[room]
-                for sensor in room_object.sensors:
+                for i, sensor in enumerate(room_object.sensors):
                     sensor_object = room_object.sensors[sensor]
+                    reading = sensor_object.getOlder()
+                    id = building_object.building_id * 10000 + room_object.room_id * 100 + i
+                    entry = [epoch_time, 1, id, int(reading)]
+
+                    self.entries.append(entry)
+
+            for corridor in building_object.corridors:
+                corridor_object = building_object.corridors[corridor]
+                for sensor in corridor_object.sensors:
+                    sensor_object = corridor_object.sensors[sensor]
                     sensor_object.getOlder()
+
+                    reading = sensor_object.getOlder()
+                    id = building_object.building_id * 10000 + room_object.room_id * 100 + i
+                    entry = [epoch_time, 1, id, int(reading)]
+
+                    self.entries.append(entry)
+
 
     def write_output_csv(self):
         np_array = np.array(self.entries)
