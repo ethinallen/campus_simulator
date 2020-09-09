@@ -5,6 +5,12 @@ import numpy as np
 import time
 import json
 
+'''
+    - need to make sure that reporting is int
+    - make a csv for each building metric
+    -
+'''
+
 class clock:
 
     def __init__(self, number_campuses):
@@ -21,17 +27,17 @@ class clock:
         self.writeDict(self.makeDict())
 
         elapsed_time = time.time() - start_time
-        print('ELAPSED TIME:\t{}'.format(elapsed_time))
+        # print('ELAPSED TIME:\t{}'.format(elapsed_time))
 
     # age the campus using input data as base
     def age(self, input_data):
         for row_index, row in input_data.iterrows():
             self.campus.getOlder(row)
-        print('DONE AGING')
+        # print('DONE AGING')
 
     # read data in from raw_csv file
     def loadData(self):
-        df = pd.read_csv('data/raw_data/AEP_hourly.csv')
+        df = pd.read_csv('./data/raw_data/AEP_hourly.csv')
         df['index'] = np.arange(len(df))
         df.set_index('index')
         return df
@@ -81,7 +87,7 @@ class clock:
         return buildingDict
 
     def writeDict(self, buildingDict):
-        with open('data/campus_snapshot.json', 'w+') as f:
+        with open('./data/campus_snapshot.json', 'w+') as f:
             json.dump(buildingDict, f, indent=4, sort_keys=True)
 
 if __name__ == '__main__':

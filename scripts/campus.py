@@ -16,7 +16,8 @@ class campus:
 
         self.entries = []
 
-        num_buildings = np.random.poisson(10, 1)[0]
+        # num_buildings = np.random.poisson(10, 1)[0]
+        num_buildings = 5
 
         self.makeBuildings(num_buildings)
 
@@ -42,8 +43,7 @@ class campus:
                 for i, sensor in enumerate(room_object.sensors):
                     sensor_object = room_object.sensors[sensor]
                     reading = sensor_object.getOlder()
-                    id = building_object.building_id * 10000 + room_object.room_id * 100 + i
-                    entry = [epoch_time, 1, id, int(reading)]
+                    entry = [epoch_time, 1, int(building_object.building_id), 0, int(room_object.room_id), i, int(reading)]
 
                     self.entries.append(entry)
 
@@ -54,15 +54,25 @@ class campus:
                     sensor_object.getOlder()
 
                     reading = sensor_object.getOlder()
-                    id = building_object.building_id * 10000 + room_object.room_id * 100 + i
-                    entry = [epoch_time, 1, id, int(reading)]
+                    # id = building_object.building_id * 10000 + room_object.room_id * 100 + i
+                    entry = [epoch_time, 1, int(building_object.building_id), 1, int(corridor_object.corridor_id), i, int(reading)]
 
                     self.entries.append(entry)
 
 
     def write_output_csv(self):
-        np_array = np.array(self.entries)
-        np.savetxt("data/processed_data/output.csv", np_array, delimiter=",")
+        for entry in self.entries:
+            s = ''
+            for i in entry:
+                s = s + str(i) + ','
+            print(s)
+
+        # print(self.entries)
+        # np.set_printoptions(suppress=True)
+        # np_array = np.array([self.entries])
+        # print(np_array)
+
+        # np.savetxt("./data/processed_data/output.csv", np_array, delimiter=",")
 
 if __name__ == '__main__':
     c = campus()
