@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 import json
+import os
 
 '''
     - need to make sure that reporting is int
@@ -24,16 +25,15 @@ class clock:
 
         self.campus.write_output_csv()
 
-        self.writeDict(self.makeDict())
+        os.system('say "your program has finished"')
 
         elapsed_time = time.time() - start_time
-        # print('ELAPSED TIME:\t{}'.format(elapsed_time))
+        print('ELAPSED TIME:\t{}'.format(elapsed_time))
 
     # age the campus using input data as base
     def age(self, input_data):
         for row_index, row in input_data.iterrows():
             self.campus.getOlder(row)
-        # print('DONE AGING')
 
     # read data in from raw_csv file
     def loadData(self):

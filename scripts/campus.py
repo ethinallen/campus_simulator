@@ -6,6 +6,7 @@ import datetime
 import time
 import dateutil.parser
 from dateutil.parser import parse
+import os
 
 class campus:
 
@@ -17,7 +18,7 @@ class campus:
         self.entries = []
 
         # num_buildings = np.random.poisson(10, 1)[0]
-        num_buildings = 5
+        num_buildings = 1
 
         self.makeBuildings(num_buildings)
 
@@ -34,7 +35,7 @@ class campus:
             building_object.generate_power_consumption(row['AEP_MW'])
 
             epoch_time = time.mktime(datetime.datetime.strptime(row['Datetime'], "%Y-%m-%d %H:%M:%S").timetuple())
-            entry = [epoch_time, 0, int(building_object.building_id), int(building_object.previous_power_consumptions[-1])]
+            entry = [int(epoch_time), 0, int(building_object.building_id), int(building_object.previous_power_consumptions[-1]), -1, -1, -1]
 
             self.entries.append(entry)
 
@@ -55,24 +56,24 @@ class campus:
 
                     reading = sensor_object.getOlder()
                     # id = building_object.building_id * 10000 + room_object.room_id * 100 + i
-                    entry = [epoch_time, 1, int(building_object.building_id), 1, int(corridor_object.corridor_id), i, int(reading)]
+                    entry = [int(epoch_time), 1, int(building_object.building_id), 1, int(corridor_object.corridor_id), i, int(reading)]
 
                     self.entries.append(entry)
 
 
     def write_output_csv(self):
-        for entry in self.entries:
-            s = ''
-            for i in entry:
-                s = s + str(i) + ','
-            print(s)
+        try:
+            np.set_printoptions(suppress=True)
+            # np_array = np.array([self.entries])
+            np_array = np.array([np.array(xi) for xi in self.entries])
+            # print(np_array)
+            np.savetxt('./data/processed_data/output.csv', np_array, delimiter=',', fmt='%d')
+            # np.savetxt("./data/processed_data/output.csv", np_array, delimiter=",")
+            os.system('say "Finished writing"')
+        except Exception as e:
+            print('{}\nfuck you drew'.format(e))
+            os.system('say "Drew you stupid cock"')
 
-        # print(self.entries)
-        # np.set_printoptions(suppress=True)
-        # np_array = np.array([self.entries])
-        # print(np_array)
-
-        # np.savetxt("./data/processed_data/output.csv", np_array, delimiter=",")
 
 if __name__ == '__main__':
     c = campus()

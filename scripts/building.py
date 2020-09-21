@@ -20,6 +20,8 @@ class building:
         self.corridors                  = { }
         self.previous_power_consumptions = []
 
+        # self.num_rooms = rd.randint(1, 5)
+        # self.num_corrs = rd.randint(1,3)
         self.num_rooms = rd.randint(1, 5)
         self.num_corrs = rd.randint(1,3)
 
