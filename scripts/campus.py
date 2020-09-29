@@ -18,7 +18,7 @@ class campus:
         self.entries = []
 
         # num_buildings = np.random.poisson(10, 1)[0]
-        num_buildings = 1
+        num_buildings = 10
 
         self.makeBuildings(num_buildings)
 
@@ -71,8 +71,7 @@ class campus:
             # np.savetxt("./data/processed_data/output.csv", np_array, delimiter=",")
             os.system('say "Finished writing"')
         except Exception as e:
-            print('{}\nfuck you drew'.format(e))
-            os.system('say "Drew you stupid cock"')
+            print('Error: {}'.format(e))
 
 
 if __name__ == '__main__':
