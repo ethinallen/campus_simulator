@@ -12,38 +12,33 @@ from corridor import corridor
 class building:
 
     # initialize the sensor based on type and set age to 0
-    def __init__(self, building_id):
+    def __init__(self, building_id, numRows):
 
-        self.building_id                = building_id
+        self.id                         = building_id
         self.building_mod               = None
         self.rooms                      = { }
         self.corridors                  = { }
-        self.previous_power_consumptions = []
+        self.stdev = np.random.poisson(50, 1)[0]
+        self.adjustment = np.random.normal(0, 100, 1)[0]
+        self.entropy = np.random.normal(0, self.stdev, numRows)
 
-        # self.num_rooms = rd.randint(1, 5)
-        # self.num_corrs = rd.randint(1,3)
         self.num_rooms = rd.randint(1, 5)
         self.num_corrs = rd.randint(1,3)
 
-        self.makeRooms(self.num_rooms)
-        self.makeCorridors(self.num_corrs)
+        self.makeRooms(numRows)
 
 
-    def makeRooms(self, number_rooms):
-        for i in range(number_rooms):
-            self.rooms[i] = room(i)
+    def makeRooms(self, numRows):
+        for i in range(self.num_rooms):
+            self.rooms[i] = room(i, numRows)
 
 
-    def makeCorridors(self, number_corridors):
-        for i in range(number_corridors):
-            self.corridors[i] = corridor(i)
+        for i in range(self.num_corrs):
+            self.corridors[i] = corridor(i, numRows)
 
-
-    def generate_power_consumption(self, rowData):
-        self.previous_power_consumptions.append(np.random.normal(rowData, 5, 1)[0])
-
-    # def generate_modifier(self):
-
+    def generate_power_consumption(self, rowData, index):
+        powerConsumption = rowData + self.adjustment + self.entropy[index]
+        return powerConsumption
 
 if __name__ == '__main__':
     s = sensor('thermostat')

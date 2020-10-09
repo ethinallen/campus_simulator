@@ -2,6 +2,7 @@ from campus import campus
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
 import time
 import json
 import os
@@ -14,26 +15,28 @@ import os
 
 class clock:
 
+    # not doing anything with the number of campuses yet
     def __init__(self, number_campuses):
         start_time = time.time()
 
-        self.campus = campus()
         inputData = self.loadData()
+        numRows = len(inputData.index)
 
+        self.campus = campus(numRows)
         self.age(inputData)
 
-        self.campus.write_output_csv()
-
-        os.system('say "your program has finished"')
+        self.write_output()
 
         elapsed_time = time.time() - start_time
         print('ELAPSED TIME:\t{}'.format(elapsed_time))
 
     # age the campus using input data as base
     def age(self, input_data):
-        for row_index, row in input_data.iterrows():
-            self.campus.getOlder(row)
-
+        for index, row in input_data.iterrows():
+            self.campus.getOlder(row, index)
+            ''' Brainstorming with Bennett :)
+            self.campus.write()
+            '''
     # read data in from raw_csv file
     def loadData(self):
         df = pd.read_csv('./data/raw_data/AEP_hourly.csv')
@@ -65,11 +68,11 @@ class clock:
 
                 for sensor in room_object.sensors:
                     sensor_object = room_object.sensors[sensor]
-                    meter_id = sensor_object.meter_id
-                    buildingDict[building_id]['rooms'][room_id][meter_id] = { }
-                    buildingDict[building_id]['rooms'][room_id][meter_id]['age'] = str(sensor_object.age)
-                    buildingDict[building_id]['rooms'][room_id][meter_id]['deaths'] = str(sensor_object.deaths)
-                    buildingDict[building_id]['rooms'][room_id][meter_id]['latest_ttl'] = int(sensor_object.ttl)
+                    meter_id = sensor_object.id
+                    buildingDict[building_id]['rooms'][room_id][id] = { }
+                    buildingDict[building_id]['rooms'][room_id][id]['age'] = str(sensor_object.age)
+                    buildingDict[building_id]['rooms'][room_id][id]['deaths'] = str(sensor_object.deaths)
+                    buildingDict[building_id]['rooms'][room_id][id]['latest_ttl'] = int(sensor_object.ttl)
 
             for corridor in building_object.corridors:
                 corridor_object = building_object.corridors[corridor]
@@ -88,6 +91,19 @@ class clock:
     def writeDict(self, buildingDict):
         with open('./data/campus_snapshot.json', 'w+') as f:
             json.dump(buildingDict, f, indent=4, sort_keys=True)
+
+    def write_output(self):
+        for building in self.campus.buildings:
+            try:
+                filename = './data/processed_data/{}output.csv'.format(str(building))
+
+                np.set_printoptions(suppress=True)
+                np_array = np.array([np.array(xi) for xi in self.campus.entries[building]])
+
+                np.savetxt(filename, np_array, delimiter=',', fmt='%d', header="")
+                os.system('say "Finished writing"')
+            except Exception as e:
+                print('Error: {}'.format(e))
 
 if __name__ == '__main__':
     clock = clock(2)

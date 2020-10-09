@@ -16,22 +16,21 @@ from sensor import sensor
 class room:
 
     # initialize the sensor based on type and set age to 0
-    def __init__(self, room_id):
+    def __init__(self, room_id, numRows):
         self.room_mod   = None
         self.sensors    = { }
-        self.room_id = room_id
+        self.id = room_id
 
         num_thermostat = rd.randint(1, 3)
         num_co2 = rd.randint(3, 10)
 
-        self.add_sensors(num_thermostat, num_co2)
+        self.add_sensors(num_thermostat, num_co2, numRows)
 
     # add sensor
-    def add_sensors(self, num_thermostat, num_co2):
+    def add_sensors(self, num_thermostat, num_co2, numRows):
         for i in range(num_thermostat):
-            self.sensors[i] = sensor(i, 'thermostat')
+            self.sensors[i] = sensor(i, 'thermostat', numRows)
         for i in range(num_co2):
-            self.sensors[i + num_thermostat] = sensor(i + num_thermostat, 'c02')
-
+            self.sensors[i + num_thermostat] = sensor(i + num_thermostat, 'c02', numRows)
 if __name__ == '__main__':
     s = sensor('thermostat')

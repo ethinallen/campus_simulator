@@ -8,25 +8,27 @@ import random as rd
 class sensor:
 
     # initialize the sensor based on type and set age to 0
-    def __init__(self, sensor_id, user_defined_sensor_type):
+    def __init__(self, sensor_id, user_defined_sensor_type, numRows):
         self.type = user_defined_sensor_type
         self.age = 0
         self.replacement_wait = 0
         self.deaths = 0
-        self.meter_id = sensor_id
+        self.id = sensor_id
         self.ttl = self.determine_ttl(self.type)
         self.readings = []
+        self.entropy = np.random.normal(70, 5, numRows)
 
     # iterate the age of the sensor
-    def getOlder(self):
+    def getOlder(self, index):
         if self.age < self.ttl and self.replacement_wait == 0:
             self.age += 1
-            reading = np.random.normal(70, 5, 1)[0]
-            return reading
+            deviation = self.entropy[index]
+            return deviation
 
         elif self.replacement_wait > 0:
             self.replacement_wait -= 1
             return -1
+
         else:
             self.ttl = self.determine_ttl(self.type)
             self.deaths += 1
