@@ -17,7 +17,6 @@ class clock:
     def __init__(self, number_campuses):
         start_time = time.time()
 
-
         self.campus = campus()
         inputData = self.loadData()
 

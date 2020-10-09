@@ -55,24 +55,18 @@ class campus:
                     sensor_object.getOlder()
 
                     reading = sensor_object.getOlder()
-                    # id = building_object.building_id * 10000 + room_object.room_id * 100 + i
                     entry = [int(epoch_time), 1, int(building_object.building_id), 1, int(corridor_object.corridor_id), i, int(reading)]
 
                     self.entries.append(entry)
 
-
     def write_output_csv(self):
         try:
             np.set_printoptions(suppress=True)
-            # np_array = np.array([self.entries])
             np_array = np.array([np.array(xi) for xi in self.entries])
-            # print(np_array)
             np.savetxt('./data/processed_data/output.csv', np_array, delimiter=',', fmt='%d')
-            # np.savetxt("./data/processed_data/output.csv", np_array, delimiter=",")
             os.system('say "Finished writing"')
         except Exception as e:
             print('Error: {}'.format(e))
-
 
 if __name__ == '__main__':
     c = campus()
