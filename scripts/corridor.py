@@ -23,9 +23,9 @@ class corridor:
     # add sensor
     def add_sensors(self, num_thermostat, num_co2, numRows):
         for i in range(num_thermostat):
-            self.sensors[i] = sensor(i, 'thermostat', numRows)
+            self.sensors[i] = sensor('thermostat', numRows)
         for i in range(num_co2):
-            self.sensors[i + num_thermostat] = sensor(i + num_thermostat, 'c02', numRows)
+            self.sensors[i + num_thermostat] = sensor('c02', numRows)
 
 if __name__ == '__main__':
     s = sensor('thermostat')

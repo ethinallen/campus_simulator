@@ -10,12 +10,13 @@ import uuid
 class sensor:
 
     # initialize the sensor based on type and set age to 0
-    def __init__(self, sensor_id, user_defined_sensor_type, numRows):
+    def __init__(self, user_defined_sensor_type, numRows):
         self.type = user_defined_sensor_type
         self.age = 0
         self.replacement_wait = 0
         self.deaths = 0
         self.id = uuid.uuid4().int
+        print("MADE SENSOR WITH ID:\t{}".format(self.id))
         self.ttl = self.determine_ttl(self.type)
         self.readings = []
         self.entropy = np.random.normal(70, 5, numRows)

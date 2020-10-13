@@ -18,7 +18,7 @@ class campus:
         self.entries = { }
 
         # num_buildings = np.random.poisson(10, 1)[0]
-        num_buildings = 5
+        num_buildings = 1
 
         self.makeBuildings(num_buildings, numRows)
 
@@ -64,9 +64,9 @@ class campus:
                     self.entries[building].append(entry)
 
     '''
-    def writeDB(self):
-        - write power from building
-        - write every sensor output
+        def writeDB(self):
+            - write power from building
+            - write every sensor output
     '''
 
 if __name__ == '__main__':
