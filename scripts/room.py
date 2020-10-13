@@ -32,5 +32,6 @@ class room:
             self.sensors[i] = sensor(i, 'thermostat', numRows)
         for i in range(num_co2):
             self.sensors[i + num_thermostat] = sensor(i + num_thermostat, 'c02', numRows)
+
 if __name__ == '__main__':
     s = sensor('thermostat')

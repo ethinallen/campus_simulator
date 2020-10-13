@@ -38,6 +38,10 @@ class campus:
             epoch_time = time.mktime(datetime.datetime.strptime(row['Datetime'], "%Y-%m-%d %H:%M:%S").timetuple())
             entry = [int(epoch_time), 0, int(building_object.id), int(reading), -1, -1, -1]
 
+            '''
+            epochTime,isSensor,buildingid,buildingpowerreading,roomcorrobjectid,sensorid,reading
+            '''
+
             self.entries[building].append(entry)
 
             for room in building_object.rooms:
@@ -45,7 +49,7 @@ class campus:
                 for i, sensor in enumerate(room_object.sensors):
                     sensor_object = room_object.sensors[sensor]
                     deviation = sensor_object.getOlder(index)
-                    entry = [epoch_time, 1, int(building_object.id), 0, int(room_object.id), i, int(reading)]
+                    entry = [epoch_time, 1, int(building_object.id), -1, int(room_object.id), i, int(reading)]
 
                     self.entries[building].append(entry)
 
@@ -55,7 +59,7 @@ class campus:
                     sensor_object = corridor_object.sensors[sensor]
 
                     deviation = sensor_object.getOlder(index)
-                    entry = [int(epoch_time), 1, int(building_object.id), 1, int(corridor_object.id), i, int(reading)]
+                    entry = [int(epoch_time), 1, int(building_object.id), -2, int(corridor_object.id), i, int(reading)]
 
                     self.entries[building].append(entry)
 

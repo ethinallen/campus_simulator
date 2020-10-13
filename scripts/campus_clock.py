@@ -100,8 +100,7 @@ class clock:
                 np.set_printoptions(suppress=True)
                 np_array = np.array([np.array(xi) for xi in self.campus.entries[building]])
 
-                np.savetxt(filename, np_array, delimiter=',', fmt='%d', header="")
-                os.system('say "Finished writing"')
+                np.savetxt(filename, np_array, delimiter=',', fmt='%d', header="epochTime,isSensor,buildingid,buildingpowerreading,roomcorrobjectid,sensorid,reading")
             except Exception as e:
                 print('Error: {}'.format(e))
 

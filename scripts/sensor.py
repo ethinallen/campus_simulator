@@ -1,7 +1,8 @@
 import numpy as np
 import random as rd
+import requests
 
-'''s
+'''
     - Need to give them different reporting frequencies
 '''
 
