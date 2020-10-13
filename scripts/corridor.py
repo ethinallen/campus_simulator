@@ -1,6 +1,7 @@
 import numpy as np
 from sensor import sensor
 import random as rd
+import uuid
 
 '''
     - at least 1 thermostat
@@ -13,7 +14,7 @@ class corridor:
     def __init__(self, corridor_id, numRows):
         self.corridor_mod = None
         self.sensors = { }
-        self.id = corridor_id
+        self.id = uuid.uuid4().int
 
         num_thermostat = rd.randint(1, 3)
         num_co2 = rd.randint(3, 10)

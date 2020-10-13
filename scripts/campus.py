@@ -8,6 +8,8 @@ import dateutil.parser
 from dateutil.parser import parse
 import os
 
+import meerschaum as mrsm
+
 class campus:
 
     # initialize the sensor based on type and set age to 0
@@ -16,10 +18,15 @@ class campus:
         self.buildings = { }
 
         self.entries = { }
+        self.metrics = {
+            'power' : [],
+            'temperature' : []
+        }
 
         # num_buildings = np.random.poisson(10, 1)[0]
         num_buildings = 1
 
+        # self.makePipe()
         self.makeBuildings(num_buildings, numRows)
 
     # instantiate buildings
@@ -39,10 +46,11 @@ class campus:
             entry = [int(epoch_time), 0, int(building_object.id), int(reading), -1, -1, -1]
 
             '''
-            epochTime,isSensor,buildingid,buildingpowerreading,roomcorrobjectid,sensorid,reading
+                epochTime,isSensor,buildingid,buildingpowerreading,roomcorrobjectid,sensorid,reading
             '''
 
-            self.entries[building].append(entry)
+            self.metrics['power'].append(entry)
+
 
             for room in building_object.rooms:
                 room_object = building_object.rooms[room]
@@ -50,8 +58,7 @@ class campus:
                     sensor_object = room_object.sensors[sensor]
                     deviation = sensor_object.getOlder(index)
                     entry = [epoch_time, 1, int(building_object.id), -1, int(room_object.id), i, int(deviation)]
-
-                    self.entries[building].append(entry)
+                    self.metrics['temperature'].append(entry)
 
             for corridor in building_object.corridors:
                 corridor_object = building_object.corridors[corridor]
@@ -60,8 +67,19 @@ class campus:
 
                     deviation = sensor_object.getOlder(index)
                     entry = [int(epoch_time), 1, int(building_object.id), -2, int(corridor_object.id), i, int(deviation)]
+                    self.metrics['temperature'].append(entry)
 
-                    self.entries[building].append(entry)
+    def makePipe(self):
+        pipe = mrsm.Pipe('sim', 'power', str(building))
+        pipe.parameters = {
+            'columns' : {
+                'datetime'  : 'epochTime',
+                'id'        : 'sensorid'
+            }
+        }
+
+        pipe.register(debug=True)
+        return pipe
 
     '''
         def writeDB(self):
@@ -71,3 +89,4 @@ class campus:
 
 if __name__ == '__main__':
     c = campus()
+    c.makePipe()

@@ -1,6 +1,7 @@
 import numpy as np
 import random as rd
 from sensor import sensor
+import uuid
 
 '''
     - at least 1 thermostat
@@ -19,7 +20,7 @@ class room:
     def __init__(self, room_id, numRows):
         self.room_mod   = None
         self.sensors    = { }
-        self.id = room_id
+        self.id = uuid.uuid4().int
 
         num_thermostat = rd.randint(1, 3)
         num_co2 = rd.randint(3, 10)
