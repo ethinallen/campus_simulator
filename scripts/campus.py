@@ -49,7 +49,7 @@ class campus:
                 for i, sensor in enumerate(room_object.sensors):
                     sensor_object = room_object.sensors[sensor]
                     deviation = sensor_object.getOlder(index)
-                    entry = [epoch_time, 1, int(building_object.id), -1, int(room_object.id), i, int(reading)]
+                    entry = [epoch_time, 1, int(building_object.id), -1, int(room_object.id), i, int(deviation)]
 
                     self.entries[building].append(entry)
 
@@ -59,7 +59,7 @@ class campus:
                     sensor_object = corridor_object.sensors[sensor]
 
                     deviation = sensor_object.getOlder(index)
-                    entry = [int(epoch_time), 1, int(building_object.id), -2, int(corridor_object.id), i, int(reading)]
+                    entry = [int(epoch_time), 1, int(building_object.id), -2, int(corridor_object.id), i, int(deviation)]
 
                     self.entries[building].append(entry)
 
