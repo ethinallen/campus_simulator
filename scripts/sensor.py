@@ -1,6 +1,7 @@
 import numpy as np
 import random as rd
 import requests
+import uuid
 
 '''
     - Need to give them different reporting frequencies
@@ -14,7 +15,7 @@ class sensor:
         self.age = 0
         self.replacement_wait = 0
         self.deaths = 0
-        self.id = sensor_id
+        self.id = uuid.uuid4().int
         self.ttl = self.determine_ttl(self.type)
         self.readings = []
         self.entropy = np.random.normal(70, 5, numRows)
