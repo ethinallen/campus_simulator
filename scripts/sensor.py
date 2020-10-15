@@ -16,7 +16,6 @@ class sensor:
         self.replacement_wait = 0
         self.deaths = 0
         self.id = uuid.uuid4().int
-        print("MADE SENSOR WITH ID:\t{}".format(self.id))
         self.ttl = self.determine_ttl(self.type)
         self.readings = []
         self.entropy = np.random.normal(70, 5, numRows)

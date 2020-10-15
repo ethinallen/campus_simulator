@@ -24,7 +24,7 @@ class campus:
         }
 
         # num_buildings = np.random.poisson(10, 1)[0]
-        num_buildings = 1
+        num_buildings = 10
 
         # self.makePipe()
         self.makeBuildings(num_buildings, numRows)

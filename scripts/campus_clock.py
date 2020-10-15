@@ -44,6 +44,7 @@ class clock:
         df.set_index('index')
         return df
 
+
     def graphDF(self):
         color_pal = ["#F8766D", "#D39200", "#93AA00", "#00BA38", "#00C19F", "#00B9E3", "#619CFF", "#DB72FB"]
         self.inputData.plot(style='.', figsize=(15,5), color=color_pal[0], title='Data')
@@ -71,7 +72,6 @@ class clock:
                     meter_id = sensor_object.id
                     buildingDict[building_id]['rooms'][room_id][id] = { }
                     buildingDict[building_id]['rooms'][room_id][id]['age'] = str(sensor_object.age)
-                    buildingDict[building_id]['rooms'][room_id][id]['deaths'] = str(sensor_object.deaths)
                     buildingDict[building_id]['rooms'][room_id][id]['latest_ttl'] = int(sensor_object.ttl)
 
             for corridor in building_object.corridors:
@@ -84,7 +84,6 @@ class clock:
                     meter_id = sensor_object.meter_id
                     buildingDict[building_id]['corridors'][corridor_id][meter_id] = { }
                     buildingDict[building_id]['corridors'][corridor_id][meter_id]['age'] = str(sensor_object.age)
-                    buildingDict[building_id]['corridors'][corridor_id][meter_id]['deaths'] = str(sensor_object.deaths)
                     buildingDict[building_id]['corridors'][corridor_id][meter_id]['latest_ttl'] = str(sensor_object.ttl)
         return buildingDict
 
@@ -93,16 +92,22 @@ class clock:
             json.dump(buildingDict, f, indent=4, sort_keys=True)
 
     def write_output(self):
-        for building in self.campus.buildings:
-            try:
-                filename = './data/processed_data/{}output.csv'.format(str(building))
+        print('Writing output csv...')
+        try:
+            power_filename = './data/processed_data/power.csv'
+            temperature_filename = './data/processed_data/temperature.csv'
 
-                np.set_printoptions(suppress=True)
-                np_array = np.array([np.array(xi) for xi in self.campus.entries[building]])
+            np.set_printoptions(suppress=True)
+            np_array = np.array([np.array(xi) for xi in self.campus.metrics['power']])
 
-                np.savetxt(filename, np_array, delimiter=',', fmt='%d', header="epochTime,isSensor,buildingid,buildingpowerreading,roomcorrobjectid,sensorid,reading")
-            except Exception as e:
-                print('Error: {}'.format(e))
+            np.savetxt(power_filename, np_array, delimiter=',', fmt='%d', header="epochTime,isSensor,buildingid,buildingpowerreading,roomcorrobjectid,sensorid,reading")
+
+            np_array = np.array([np.array(xi) for xi in self.campus.metrics['temperature']])
+
+            np.savetxt(temperature_filename, np_array, delimiter=',', fmt='%d', header="epochTime,isSensor,buildingid,buildingpowerreading,roomcorrobjectid,sensorid,reading")
+
+        except Exception as e:
+            print('Error: {}'.format(e))
 
 if __name__ == '__main__':
     clock = clock(2)
