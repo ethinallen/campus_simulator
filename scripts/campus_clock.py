@@ -19,13 +19,25 @@ class clock:
     def __init__(self, number_campuses):
         start_time = time.time()
 
-        inputData = self.loadData()
-        numRows = len(inputData.index)
+        num_args = len(sys.argv)
 
-        self.campus = campus(numRows)
-        self.age(inputData)
+        if num_args > 1:
+            if sys.argv[1] == '-l':
+                snapshot = self.loadSnapshot()
+                inputData = self.loadData()
+                numRows = len(inputData.index)
+                self.campus = campus(numRows, snapshot)
 
-        self.write_output()
+        else:
+            inputData = self.loadData()
+            numRows = len(inputData.index)
+
+            self.campus = campus(numRows)
+            # self.age(inputData)
+
+        # self.write_output()
+
+        self.writeSnapshot(self.makeSnapshot())
 
         elapsed_time = time.time() - start_time
         print('ELAPSED TIME:\t{}'.format(elapsed_time))
@@ -37,6 +49,7 @@ class clock:
             ''' Brainstorming with Bennett :)
             self.campus.write()
             '''
+
     # read data in from raw_csv file
     def loadData(self):
         df = pd.read_csv('./data/raw_data/AEP_hourly.csv')
@@ -44,52 +57,73 @@ class clock:
         df.set_index('index')
         return df
 
+    def loadSnapshot(self):
+        print('LOADING SNAPSHOT')
+        with open("./data/campus_snapshot.json", "r") as f:
+            snapshot = json.load(f)
+        return snapshot
 
     def graphDF(self):
         color_pal = ["#F8766D", "#D39200", "#93AA00", "#00BA38", "#00C19F", "#00B9E3", "#619CFF", "#DB72FB"]
         self.inputData.plot(style='.', figsize=(15,5), color=color_pal[0], title='Data')
         plt.show()
 
-    # make dictionary of all of the aspects of campus; returns dictionary
-    def makeDict(self):
-        buildingDict = { }
+    # make snapshot of the state of the simulation
+    def makeSnapshot(self):
+        snapshot = { }
+
+        snapshot['time'] = 1
+        snapshot['buildings'] = {}
 
         for building in self.campus.buildings:
             building_object = self.campus.buildings[building]
-            building_id = building_object.building_id
-            buildingDict[building_id] = { }
-            buildingDict[building_id]['power_readings'] = building_object.previous_power_consumptions
-            buildingDict[building_id]['rooms'] = { }
-            buildingDict[building_id]['corridors'] = { }
+            building_id = building_object.id
+            s_building_id = str(building_object.id)
+            snapshot['buildings'][s_building_id] = { }
+            snapshot['buildings'][s_building_id]['stdev'] = building_object.stdev
+            snapshot['buildings'][s_building_id]['adjustment'] = building_object.adjustment
+            snapshot['buildings'][s_building_id]['rooms'] = { }
+            snapshot['buildings'][s_building_id]['corridors'] = { }
+
+            print(building_object.rooms)
 
             for room in building_object.rooms:
                 room_object = building_object.rooms[room]
-                room_id = room_object.room_id
-                buildingDict[building_id]['rooms'][room_id] = { }
+                room_id = room_object.id
+                s_room_id = str(room_id)
+                snapshot['buildings'][s_building_id]['rooms'][s_room_id] = { }
 
                 for sensor in room_object.sensors:
                     sensor_object = room_object.sensors[sensor]
                     meter_id = sensor_object.id
-                    buildingDict[building_id]['rooms'][room_id][id] = { }
-                    buildingDict[building_id]['rooms'][room_id][id]['age'] = str(sensor_object.age)
-                    buildingDict[building_id]['rooms'][room_id][id]['latest_ttl'] = int(sensor_object.ttl)
+                    s_meter_id = str(meter_id)
+                    snapshot['buildings'][s_building_id]['rooms'][s_room_id][s_meter_id] = { }
+                    snapshot['buildings'][s_building_id]['rooms'][s_room_id][s_meter_id]['age'] = sensor_object.age
+                    snapshot['buildings'][s_building_id]['rooms'][s_room_id][s_meter_id]['latest_ttl'] = sensor_object.ttl
+                    snapshot['buildings'][s_building_id]['rooms'][s_room_id][s_meter_id]['replacement_wait'] = sensor_object.replacement_wait
 
             for corridor in building_object.corridors:
                 corridor_object = building_object.corridors[corridor]
-                corridor_id = corridor_object.corridor_id
-                buildingDict[building_id]['corridors'][corridor_id] = { }
+                corridor_id = corridor_object.id
+                s_corridor_id = str(corridor_id)
+                snapshot['buildings'][s_building_id]['corridors'][s_corridor_id] = { }
 
                 for sensor in corridor_object.sensors:
                     sensor_object = corridor_object.sensors[sensor]
-                    meter_id = sensor_object.meter_id
-                    buildingDict[building_id]['corridors'][corridor_id][meter_id] = { }
-                    buildingDict[building_id]['corridors'][corridor_id][meter_id]['age'] = str(sensor_object.age)
-                    buildingDict[building_id]['corridors'][corridor_id][meter_id]['latest_ttl'] = str(sensor_object.ttl)
-        return buildingDict
+                    meter_id = sensor_object.id
+                    s_meter_id = str(meter_id)
+                    snapshot['buildings'][s_building_id]['corridors'][s_corridor_id][s_meter_id] = { }
+                    snapshot['buildings'][s_building_id]['corridors'][s_corridor_id][s_meter_id]['age'] = sensor_object.age
+                    snapshot['buildings'][s_building_id]['corridors'][s_corridor_id][s_meter_id]['latest_ttl'] = sensor_object.ttl
+                    snapshot['buildings'][s_building_id]['corridors'][s_corridor_id][s_meter_id]['replacement_wait'] = sensor_object.replacement_wait
 
-    def writeDict(self, buildingDict):
+
+        return snapshot
+
+    # write the snapshot to a file
+    def writeSnapshot(self, snapshot):
         with open('./data/campus_snapshot.json', 'w+') as f:
-            json.dump(buildingDict, f, indent=4, sort_keys=True)
+            json.dump(snapshot, f, indent=4)
 
     def write_output(self):
         print('Writing output csv...')
@@ -108,6 +142,7 @@ class clock:
 
         except Exception as e:
             print('Error: {}'.format(e))
+
 
 if __name__ == '__main__':
     clock = clock(2)

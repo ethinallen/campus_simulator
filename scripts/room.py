@@ -17,15 +17,23 @@ import uuid
 class room:
 
     # initialize the sensor based on type and set age to 0
-    def __init__(self, room_id, numRows):
+    def __init__(self, room_id, numRows, *attrs):
         self.room_mod   = None
         self.sensors    = { }
-        self.id = uuid.uuid4().int
 
-        num_thermostat = rd.randint(1, 3)
-        num_co2 = rd.randint(3, 10)
+        if attrs:
+            attrs=attrs[0]
+            for i, sensorID in enumerate(attrs['info']):
+                sensor_attributes = {'id': sensorID, 'info' : attrs['info'][sensorID]}
+                self.sensors[i] = sensor('thermostat', numRows, sensor_attributes)
+                self.id = attrs['id']
+        else:
+            self.id = uuid.uuid4().int
 
-        self.add_sensors(num_thermostat, num_co2, numRows)
+            num_thermostat = rd.randint(1, 2)
+            num_co2 = rd.randint(1, 3)
+
+            self.add_sensors(num_thermostat, num_co2, numRows)
 
     # add sensor
     def add_sensors(self, num_thermostat, num_co2, numRows):
