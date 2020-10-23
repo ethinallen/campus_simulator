@@ -62,6 +62,10 @@ class sensor:
         s = np.random.poisson(17532, 1)[0]
         return np.int(s)
 
+    # 
+    def reportData(self, ):
+        return None
+
 if __name__ == '__main__':
     s = sensor('thermostat')
     print(np.mean(s.ttl))

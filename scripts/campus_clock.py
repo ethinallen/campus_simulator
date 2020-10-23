@@ -1,4 +1,6 @@
 from campus import campus
+
+from datetime import datetime as dt
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -7,11 +9,12 @@ import time
 import json
 import os
 
-'''
-    - need to make sure that reporting is int
-    - make a csv for each building metric
-    -
-'''
+try:
+    import meerschaum as mrsm
+    print('IMPORTED Meerschaum')
+except:
+    print("\n\nFAILED TO IMPORT MEERSCHAUM!\n\n")
+
 
 class clock:
 
@@ -29,13 +32,14 @@ class clock:
                 self.campus = campus(numRows, snapshot)
 
         else:
-            inputData = self.loadData()
+            inputData = self.loadData().loc[:5]
             numRows = len(inputData.index)
 
             self.campus = campus(numRows)
-            # self.age(inputData)
+            self.age(inputData)
 
         # self.write_output()
+        self.writeDB()
 
         self.writeSnapshot(self.makeSnapshot())
 
@@ -84,8 +88,6 @@ class clock:
             snapshot['buildings'][s_building_id]['adjustment'] = building_object.adjustment
             snapshot['buildings'][s_building_id]['rooms'] = { }
             snapshot['buildings'][s_building_id]['corridors'] = { }
-
-            print(building_object.rooms)
 
             for room in building_object.rooms:
                 room_object = building_object.rooms[room]
@@ -143,6 +145,25 @@ class clock:
         except Exception as e:
             print('Error: {}'.format(e))
 
+    def writeDB(self):
+        np.set_printoptions(suppress=True)
+        power_array = np.array([np.array(xi) for xi in self.campus.metrics['power']])
+        temperature_array = np.array([np.array(xi) for xi in self.campus.metrics['temperature']])
+
+        powerDF = pd.DataFrame(data=power_array, columns=["epochTime","isSensor","buildingid","buildingpowerreading","roomcorrobjectid","sensorid","reading"])
+        temperatureDF = pd.DataFrame(data=temperature_array, columns=["epochTime","isSensor","buildingid","buildingpowerreading","roomcorrobjectid","sensorid","reading"])
+
+        powerDF['Datetime'] = pd.to_datetime(powerDF['epochTime'], unit='s')
+        temperatureDF['Datetime'] = pd.to_datetime(temperatureDF['epochTime'], unit='s')
+
+        print(powerDF.head)
+        print(temperatureDF.head)
+
+        # powerPipe = mrsm.Pipe('sim',powerDF)
+        # temperaturePipe = mrsm.Pipe('sim',temperatureDF)
+        #
+        # powerPipe.sync(df)
+        # temperaturePipe.sync(df)
 
 if __name__ == '__main__':
     clock = clock(2)

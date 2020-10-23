@@ -31,7 +31,8 @@ class campus:
                 self.entries[buildingID] = []
 
         else:
-            num_buildings = np.random.poisson(10, 1)[0]
+            # num_buildings = np.random.poisson(10, 1)[0]
+            num_buildings = 1
 
             self.makeBuildings(num_buildings, numRows)
 
