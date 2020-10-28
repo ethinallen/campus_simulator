@@ -158,8 +158,8 @@ class clock:
         powerPipe = mrsm.Pipe('sim', 'power', mrsm_instance='sql:mrsm_server')
         temperaturePipe = mrsm.Pipe('sim', 'temperature', mrsm_instance='sql:mrsm_server')
 
-        # powerPipe.sync(powerDF)
-        # temperaturePipe.sync(temperatureDF, debug=True)
+        powerPipe.sync(powerDF)
+        temperaturePipe.sync(temperatureDF, debug=True)
 
 if __name__ == '__main__':
     clock = clock(2)
