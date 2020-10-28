@@ -15,7 +15,6 @@ try:
 except:
     print("\n\nFAILED TO IMPORT MEERSCHAUM!\n\n")
 
-
 class clock:
 
     # not doing anything with the number of campuses yet
@@ -32,7 +31,7 @@ class clock:
                 self.campus = campus(numRows, snapshot)
 
         else:
-            inputData = self.loadData().loc[:5]
+            inputData = self.loadData()
             numRows = len(inputData.index)
 
             self.campus = campus(numRows)
@@ -118,8 +117,6 @@ class clock:
                     snapshot['buildings'][s_building_id]['corridors'][s_corridor_id][s_meter_id]['age'] = sensor_object.age
                     snapshot['buildings'][s_building_id]['corridors'][s_corridor_id][s_meter_id]['latest_ttl'] = sensor_object.ttl
                     snapshot['buildings'][s_building_id]['corridors'][s_corridor_id][s_meter_id]['replacement_wait'] = sensor_object.replacement_wait
-
-
         return snapshot
 
     # write the snapshot to a file
@@ -153,17 +150,14 @@ class clock:
         powerDF = pd.DataFrame(data=power_array, columns=["epochTime","isSensor","buildingid","buildingpowerreading","roomcorrobjectid","sensorid","reading"])
         temperatureDF = pd.DataFrame(data=temperature_array, columns=["epochTime","isSensor","buildingid","buildingpowerreading","roomcorrobjectid","sensorid","reading"])
 
-        powerDF['Datetime'] = pd.to_datetime(powerDF['epochTime'], unit='s')
-        temperatureDF['Datetime'] = pd.to_datetime(temperatureDF['epochTime'], unit='s')
+        powerDF['datetime'] = pd.to_datetime(powerDF['epochTime'], unit='s')
+        temperatureDF['datetime'] = pd.to_datetime(temperatureDF['epochTime'], unit='s')
 
-        print(powerDF.head)
-        print(temperatureDF.head)
+        powerPipe = mrsm.Pipe('sim', 'power', mrsm_instance='sql:mrsm_server')
+        temperaturePipe = mrsm.Pipe('sim', 'temperature', mrsm_instance='sql:mrsm_server')
 
-        # powerPipe = mrsm.Pipe('sim',powerDF)
-        # temperaturePipe = mrsm.Pipe('sim',temperatureDF)
-        #
-        # powerPipe.sync(df)
-        # temperaturePipe.sync(df)
+        # powerPipe.sync(powerDF)
+        temperaturePipe.sync(temperatureDF, debug=True)
 
 if __name__ == '__main__':
     clock = clock(2)

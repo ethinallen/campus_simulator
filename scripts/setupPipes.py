@@ -1,12 +1,14 @@
 import meerschaum as mrsm
 
 # function to set up the pipes !
-def setupPipes(metrics):
-    for metric in metrics:
-    	pipe = mrsm.Pipe('csv', metric)
-    	pipe.columns = {'datetime':'datetime' , 'id':'location'}
-    	pipe.register()
+def setupPipes():
+	powerPipe = mrsm.Pipe('sim', 'power', mrsm_instance='api:mrsm_server')
+	powerPipe.columns = {'datetime':'datetime' , 'id':'sensorid'}
+	# powerPipe.register()
+
+	temperaturePipe = mrsm.Pipe('sim', 'temperature', mrsm_instance='api:mrsm_server')
+	temperaturePipe.columns = {'datetime':'datetime' , 'id':'sensorid'}
+	# temperaturePipe.register()
 
 if __name__ == "__main__":
-    metrics = ['power','temperature','co2','humidity','occupancy','water']
-    setupPipes(metrics)
+    setupPipes()

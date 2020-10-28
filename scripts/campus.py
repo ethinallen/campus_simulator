@@ -32,7 +32,7 @@ class campus:
 
         else:
             # num_buildings = np.random.poisson(10, 1)[0]
-            num_buildings = 1
+            num_buildings = 5
 
             self.makeBuildings(num_buildings, numRows)
 
