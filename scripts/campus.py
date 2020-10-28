@@ -50,11 +50,7 @@ class campus:
             reading = building_object.generate_power_consumption(row['AEP_MW'], index)
 
             epoch_time = time.mktime(datetime.datetime.strptime(row['Datetime'], "%Y-%m-%d %H:%M:%S").timetuple())
-            entry = [np.int64(epoch_time), 0, np.int64(building_object.id), np.int64(reading), -1, -1, -1]
-
-            '''
-                epochTime,isSensor,buildingid,buildingpowerreading,roomcorrobjectid,sensorid,reading
-            '''
+            entry = [np.int64(epoch_time), np.int64(building_object.id), np.int64(reading)]
 
             self.metrics['power'].append(entry)
 
@@ -63,7 +59,7 @@ class campus:
                 for i, sensor in enumerate(room_object.sensors):
                     sensor_object = room_object.sensors[sensor]
                     deviation = sensor_object.getOlder(index)
-                    entry = [int(epoch_time), 1, int(building_object.id), -1, int(room_object.id), int(sensor_object.id), np.int64(deviation)]
+                    entry = [int(epoch_time), int(building_object.id), int(room_object.id), int(sensor_object.id), np.int64(deviation)]
                     self.metrics['temperature'].append(entry)
 
             for corridor in building_object.corridors:
@@ -72,7 +68,7 @@ class campus:
                     sensor_object = corridor_object.sensors[sensor]
 
                     deviation = sensor_object.getOlder(index)
-                    entry = [int(epoch_time), 1, int(building_object.id), -1, int(corridor_object.id), int(sensor_object.id), np.int64(deviation)]
+                    entry = [int(epoch_time), int(building_object.id), int(corridor_object.id), int(sensor_object.id), np.int64(deviation)]
                     self.metrics['temperature'].append(entry)
 
     def makePipe(self):

@@ -147,8 +147,8 @@ class clock:
         power_array = np.array([np.array(xi) for xi in self.campus.metrics['power']])
         temperature_array = np.array([np.array(xi) for xi in self.campus.metrics['temperature']])
 
-        powerDF = pd.DataFrame(data=power_array, columns=["epochTime","isSensor","buildingid","buildingpowerreading","roomcorrobjectid","sensorid","reading"])
-        temperatureDF = pd.DataFrame(data=temperature_array, columns=["epochTime","isSensor","buildingid","buildingpowerreading","roomcorrobjectid","sensorid","reading"])
+        powerDF = pd.DataFrame(data=power_array, columns=["epochTime","buildingid","reading"])
+        temperatureDF = pd.DataFrame(data=temperature_array, columns=["epochTime","buildingid","roomcorrobjectid","sensorid","reading"])
 
 
         powerDF['datetime'] = pd.to_datetime(powerDF['epochTime'], unit='s')
