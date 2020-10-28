@@ -26,7 +26,7 @@ class sensor:
             self.age = 0
             self.replacement_wait = 0
             self.deaths = 0
-            self.id = str(uuid.uuid4().int)[:7]
+            self.id = np.int64(str(uuid.uuid4().int)[:7])
             self.ttl = int(self.determine_ttl(self.type))
 
 

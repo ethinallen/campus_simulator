@@ -28,8 +28,7 @@ class room:
                 self.sensors[i] = sensor('thermostat', numRows, sensor_attributes)
                 self.id = attrs['id']
         else:
-            self.id = str(uuid.uuid4().int)[:7]
-            print(self.id)
+            self.id = np.int64(str(uuid.uuid4().int)[:7])
 
             num_thermostat = rd.randint(1, 2)
             num_co2 = rd.randint(1, 3)
