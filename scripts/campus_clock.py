@@ -154,6 +154,10 @@ class clock:
         powerDF['datetime'] = pd.to_datetime(powerDF['epochTime'], unit='s')
         temperatureDF['datetime'] = pd.to_datetime(temperatureDF['epochTime'], unit='s')
         temperatureDF['reading'] = temperatureDF['reading'].astype(np.int64)
+        temperatureDF['epochTime'] = temperatureDF['epochTime'].astype(np.int64)
+        temperatureDF['buildingid'] = temperatureDF['buildingid'].astype(np.int64)
+        temperatureDF['roomcorrobjectid'] = temperatureDF['roomcorrobjectid'].astype(np.int64)
+        temperatureDF['sensorid'] = temperatureDF['sensorid'].astype(np.int64)
 
         powerPipe = mrsm.Pipe('sim', 'power', mrsm_instance='sql:mrsm_server')
         temperaturePipe = mrsm.Pipe('sim', 'temperature', mrsm_instance='sql:mrsm_server')
