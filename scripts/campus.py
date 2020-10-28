@@ -63,7 +63,7 @@ class campus:
                 for i, sensor in enumerate(room_object.sensors):
                     sensor_object = room_object.sensors[sensor]
                     deviation = sensor_object.getOlder(index)
-                    entry = [epoch_time, 1, building_object.id, -1, room_object.id, sensor_object.id, int(deviation)]
+                    entry = [int(epoch_time), 1, int(building_object.id), -1, int(room_object.id), int(sensor_object.id), int(deviation)]
                     self.metrics['temperature'].append(entry)
 
             for corridor in building_object.corridors:
@@ -72,7 +72,7 @@ class campus:
                     sensor_object = corridor_object.sensors[sensor]
 
                     deviation = sensor_object.getOlder(index)
-                    entry = [int(epoch_time), 1, building_object.id, -2, corridor_object.id, sensor_object.id, int(deviation)]
+                    entry = [int(epoch_time), 1, int(building_object.id), -2, int(corridor_object.id), int(sensor_object.id), int(deviation)]
                     self.metrics['temperature'].append(entry)
 
     def makePipe(self):
