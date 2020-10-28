@@ -31,7 +31,7 @@ class clock:
                 self.campus = campus(numRows, snapshot)
 
         else:
-            inputData = self.loadData()
+            inputData = self.loadData().iloc[:5000]
             numRows = len(inputData.index)
 
             self.campus = campus(numRows)
