@@ -35,6 +35,7 @@ class sensor:
         if self.age < self.ttl and self.replacement_wait == 0:
             self.age += 1
             deviation = self.entropy[index]
+            deviation = np.int64(deviation)
             return deviation
 
         elif self.replacement_wait > 0:
@@ -62,7 +63,7 @@ class sensor:
         s = np.random.poisson(17532, 1)[0]
         return np.int(s)
 
-    # 
+    #
     def reportData(self, ):
         return None
 

@@ -31,7 +31,7 @@ class clock:
                 self.campus = campus(numRows, snapshot)
 
         else:
-            inputData = self.loadData().iloc[:5]
+            inputData = self.loadData().iloc[:5000]
             numRows = len(inputData.index)
 
             self.campus = campus(numRows)
@@ -153,6 +153,7 @@ class clock:
 
         powerDF['datetime'] = pd.to_datetime(powerDF['epochTime'], unit='s')
         temperatureDF['datetime'] = pd.to_datetime(temperatureDF['epochTime'], unit='s')
+        temperatureDF['reading'] = temperatureDF['reading'].astype(np.int64)
 
         powerPipe = mrsm.Pipe('sim', 'power', mrsm_instance='sql:mrsm_server')
         temperaturePipe = mrsm.Pipe('sim', 'temperature', mrsm_instance='sql:mrsm_server')
